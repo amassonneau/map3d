@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Open GL Test</title>
+        <script src="lib/jquery-1.10.2.min.js"></script>
+        <script src="lib/EventEmitter2.js"></script>
+        <script src="lib/underscore.js"></script>
+        <script src="lib/glMatrix.js"></script>
+        <script src="3d/Leaflet.js"></script>
+        <script src="3d/Earth.js"></script>
+        <script src="3d/GLManager.js"></script>
+        <script src="index.js"></script>
+    </head>
+
+    <script id="shader-vs" type="x-shader/x-vertex">
+        attribute vec3 aVertexPosition;
+        attribute vec3 aVertexBarycentric;
+
+        uniform mat4 uMVMatrix;
+        uniform mat4 uPMatrix;
+
+        varying vec3 vBC;
+
+        void main(void) {
+            vBC = aVertexBarycentric;
+            gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+        }
+    </script>
+
+    <script id="shader-fs" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec3 vBC;
+
+        void main(){
+            if(any(lessThan(vBC, vec3(0.02)))){
+                gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
+            }
+            else{
+                gl_FragColor = vec4(0.0, 0.0, 0.0, 0.2);
+            }
+        }
+    </script>
+    <body style="margin:0px;position:absolute;top:0px;bottom:0px;left:0px;right:0px;overflow: hidden">
+        <canvas class="globe" style="width:100%;height:100%"></canvas>
+    </body>
+</html>
