@@ -1,0 +1,25 @@
+:vertex
+    attribute vec3 aVertexPosition;
+    attribute vec3 aVertexBarycentric;
+
+    uniform mat4 tMatrix;
+
+    varying vec3 vBC;
+
+    void main(void) {
+        vBC = aVertexBarycentric;
+        gl_Position = tMatrix * vec4(aVertexPosition, 1.0);
+    }
+
+:fragment
+    precision mediump float;
+    varying vec3 vBC;
+
+    void main(){
+        if(any(lessThan(vBC, vec3(0.01)))){
+            gl_FragColor = vec4(0.5, 0.5, 0.7, 0.9);
+        }
+        else{
+            gl_FragColor = vec4(0.5, 0.5, 0.5, 0.1);
+        }
+    }
