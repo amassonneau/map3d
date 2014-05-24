@@ -104,9 +104,21 @@ define(function(require, exports, module){
         if(!sceneObject.getGeometry().isBuffered()){
             sceneObject.getGeometry().buffer(this);
         }
+        if(sceneObject.getTexture()){
+            if(!sceneObject.getTexture().isLoaded()){
+                return false;
+            }
+            if(!sceneObject.getTexture().isBuffered()){
+                sceneObject.getTexture().buffer(this);
+            }
+        }
     }
 
     Shader.prototype.buffer = function(geometry){
+        throw "This method should be overriden";
+    }
+
+    Shader.prototype.bufferTexture = function(texture){
         throw "This method should be overriden";
     }
 

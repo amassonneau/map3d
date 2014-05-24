@@ -3,8 +3,7 @@ define(function(require, exports, module){
 
     var Camera = require("../Camera"),
         objectUtils = require("../utils/objects"),
-        glMatrix = require("gl-matrix"),
-        mat4 = glMatrix.mat4;
+        mathUtils = require("../utils/math");
 
     var DEG_TO_RAD = Math.PI/180,
         RAD_TO_DEG = 180/Math.PI;
@@ -14,6 +13,22 @@ define(function(require, exports, module){
     function Spherical(options){
         Camera.call(this, options);
         this._transition = null;
+        this._lat = null;
+        this._lng = null;
+        this._zoom = null;
+
+        this._options.min || (this._options.min = {});
+        isNaN(this._options.min.lat) && (this._options.min.lat = -400);
+        isNaN(this._options.min.lng) && (this._options.min.lng = -400);
+        this._options.min.lat = this._options.min.lat * DEG_TO_RAD;
+        this._options.min.lng = this._options.min.lng * DEG_TO_RAD;
+
+        this._options.max || (this._options.max = {});
+        isNaN(this._options.max.lat) && (this._options.max.lat = 400);
+        isNaN(this._options.max.lng) && (this._options.max.lng = 400);
+        this._options.max.lat = this._options.max.lat * DEG_TO_RAD;
+        this._options.max.lng = this._options.max.lng * DEG_TO_RAD;
+
         this.setLatitude(this._options.latitude);
         this.setLongitude(this._options.longitude);
         this.setZoom(this._options.zoom);
@@ -55,6 +70,11 @@ define(function(require, exports, module){
 
         lng = ((lng + Math.PI) % (Math.PI*2)) - Math.PI;
         lat = ((lat + Math.PI/2) % Math.PI) - Math.PI/2;
+        (lat < this._options.min.lat) && (lat = this._options.min.lat);
+        (lat > this._options.max.lat) && (lat = this._options.max.lat);
+        (lng < this._options.min.lng) && (lng = this._options.min.lng);
+        (lng > this._options.max.lng) && (lng = this._options.max.lng);
+
         if(!fromTransition && this._transition){
             this._transition.stop();
             this._transition = null;
@@ -74,20 +94,11 @@ define(function(require, exports, module){
         var startLat = this._lat,
             startLng = this._lng,
             startZoom = this._zoom,
-            diffLat = modDistance(startLat, lat, Math.PI/2),
-            diffLng = modDistance(startLng, lng, Math.PI),
+            diffLat = mathUtils.mod.distance(startLat, lat, Math.PI/2),
+            diffLng = mathUtils.mod.distance(startLng, lng, Math.PI),
             diffZoom = zoom-startZoom,
             that = this;
 
-        function modDistance(start, end, max){
-            start += max;
-            end += max;
-            if(Math.abs(end-start) > max){
-                return end > start ? end - start - 2*max  : end + 2*max - start;
-            }else{
-                return end - start;
-            }
-        }
         console.log("Transition lng diff: " + diffLng * RAD_TO_DEG);
         return transition.start(function(step){
             compute.call(that,

@@ -17,10 +17,10 @@ define(function(require, exports, module){
         var gl = this._scene.getGL();
 
         Shader.prototype.compile.call(this);
-        this._vertices = gl.getAttribLocation(this._program, "aVertexPosition");
+        this._vertices = gl.getAttribLocation(this._program, "vertices");
         gl.enableVertexAttribArray(this._vertices);
 
-        this._bcVertices = gl.getAttribLocation(this._program, "aVertexBarycentric");
+        this._bcVertices = gl.getAttribLocation(this._program, "bcVertices");
         gl.enableVertexAttribArray(this._bcVertices);
 
         this._transformMatrix = gl.getUniformLocation(this._program, "tMatrix");
@@ -47,6 +47,10 @@ define(function(require, exports, module){
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(barycentricVertices), gl.STATIC_DRAW);
 
         return buffers;
+    };
+
+    Mesh.prototype.bufferTexture = function(texture){
+
     }
 
     Mesh.prototype.unbuffer = function(geometry){
@@ -56,7 +60,7 @@ define(function(require, exports, module){
         var gl = this._scene.getGL();
         gl.deleteBuffer(geometry.getBuffers().vertices);
         gl.deleteBuffer(geometry.getBuffers().bcVertices);
-    }
+    };
 
 
     Mesh.prototype.render = function(sceneObject){
@@ -78,5 +82,5 @@ define(function(require, exports, module){
         gl.vertexAttribPointer(this._bcVertices, buffers.bcVertices.size, gl.FLOAT, false, 0, 0);
 
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffers.vertices.count);
-    }
+    };
 });

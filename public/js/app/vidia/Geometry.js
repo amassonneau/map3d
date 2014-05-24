@@ -28,6 +28,16 @@ define(function(require, exports, module){
         return this._data.bcVertices;
     };
 
+    Geometry.prototype.getUVVertices = function(){
+        if(!this._data){
+            this.generate();
+        }
+        if(!this._data || !this._data.uvVertices){
+            throw "This geometry cannot generate uv vertices.";
+        }
+        return this._data.uvVertices;
+    };
+
     Geometry.prototype.generate = function(){
         throw "This method should be overriden";
     };

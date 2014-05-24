@@ -5,6 +5,7 @@ define(function(require, exports, module){
         Geometry: require("./Geometry"),
         Shader: require("./Shader"),
         Camera: require("./Camera"),
+        Texture: require("./Texture"),
         Transition: require("./Transition"),
         geometries: require("./geometries/index"),
         shaders: require("./shaders/index"),

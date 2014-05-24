@@ -23,6 +23,7 @@ define(function(require, exports, module){
         this._objects = [];
         this._isStarted = false;
         this._transform = mat4.create();
+        this._perspectiveAngle = null;
         mat4.identity(this._transform);
     }
 
@@ -58,12 +59,22 @@ define(function(require, exports, module){
     };
 
     Scene.prototype.setPerspective = function(angle, min, max){
-        mat4.perspective(this._transform, angle, this.getWidth()/this.getHeight(), min, max);
+        this._perspectiveAngle = angle;
+        this._ratio = this.getWidth()/this.getHeight();
+        mat4.perspective(this._transform, this._perspectiveAngle, this._ratio, min, max);
     };
 
     Scene.prototype.getTransform = function(){
         return this._transform;
-    }
+    };
+
+    Scene.prototype.getPerspectiveAngle = function(){
+        return this._perspectiveAngle;
+    };
+
+    Scene.prototype.getRatio = function(){
+        return this._ratio;
+    };
 
     Scene.prototype.start = function(){
         if(!this._camera){

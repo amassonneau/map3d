@@ -10,4 +10,12 @@ define(function(require, exports, module){
     function SurfaceTile(scene, options){
         SceneObject.call(this, scene, options);
     }
-})
+
+    SurfaceTile.prototype.getX = function(){
+        return this._options.x;
+    };
+
+    SurfaceTile.prototype.getY = function(){
+        return this._options.y;
+    };
+});

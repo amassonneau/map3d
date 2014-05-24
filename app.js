@@ -4,20 +4,11 @@ var express = require('express'),
 var app = express();
 
 app.use(express.static(__dirname + '/public'));
-app.get('/wHeat', function(req, res){
-    var proxy_request = http.get({
-        hostname: "localhost",
-        port: 8080,
-        path: req.url
-    }, function(proxy_response){
-        proxy_response.addListener('data', function(chunk) {
-            res.write(chunk, 'binary');
-        });
-        proxy_response.addListener('end', function() {
-            res.end();
-        });
-        proxy_response.headers.location = "http://" + req.host + req.url;
-        res.writeHead(200, proxy_response.headers);
+app.get('/map/*', function(req, res){
+    var proxy_request = http.get('http://a.tile.openstreetmap.org' + req.url.replace("/map", ""), function(proxy_response){
+//        res._headers = proxy_response.headers;
+        res.setHeader("Expires",  (new Date((new Date()).getTime() + 3600*24*1000)).toString());
+        proxy_response.pipe(res);
     });
     proxy_request.on('error', function(e) {
         console.log('problem with request: ' + e.message);

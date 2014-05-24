@@ -37,17 +37,16 @@ define(function(require, exports, module){
     };
 
     geometry.mercator = {};
+
+    geometry.mercator.getZoom = function(zoom){
+        return zoom < 3 ? 3 : zoom;
+    }
+
     geometry.mercator.getAxisTilesCount = function(zoom){
-        if(!zoom || zoom < 1){
-            zoom = 1;
-        }
-        return (1 << zoom);
+        return (1 << geometry.mercator.getZoom(zoom));
     };
 
     geometry.mercator.getTilesCount = function(zoom){
-        if(!zoom || zoom < 1){
-            zoom = 1;
-        }
-        return (1 << (zoom*2));
+        return (1 << (geometry.mercator.getZoom(zoom)*2));
     }
 })

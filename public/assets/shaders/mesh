@@ -1,14 +1,14 @@
 :vertex
-    attribute vec3 aVertexPosition;
-    attribute vec3 aVertexBarycentric;
+    attribute vec3 vertices;
+    attribute vec3 bcVertices;
 
     uniform mat4 tMatrix;
 
     varying vec3 vBC;
 
     void main(void) {
-        vBC = aVertexBarycentric;
-        gl_Position = tMatrix * vec4(aVertexPosition, 1.0);
+        vBC = bcVertices;
+        gl_Position = tMatrix * vec4(vertices, 1.0);
     }
 
 :fragment

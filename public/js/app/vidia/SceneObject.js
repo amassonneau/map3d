@@ -13,24 +13,28 @@ define(function(require, exports, module){
         this._transform = mat4.create();
         this._shader = null;
         this._geometry = null;
+        this._texture = null;
         this.reset();
         this.setGeometry(options.geometry);
         this.setShader(options.shader);
+        this.setTexture(options.texture);
     }
 
     SceneObject.prototype.setGeometry = function(geometry){
-        //We should clean the buffers here
         this._geometry = geometry;
     };
 
     SceneObject.prototype.setShader = function(shader){
-        //We should clean the buffers here;
         this._shader = shader;
+    };
+
+    SceneObject.prototype.setTexture = function(texture){
+        this._texture = texture;
     };
 
     SceneObject.prototype.reset = function(){
         mat4.identity(this._transform);
-    }
+    };
 
     SceneObject.prototype.translate = function(definition){
         mat4.translate(this._transform, [definition.x || 0, definition.y || 0, definition.z || 0]);
@@ -42,6 +46,10 @@ define(function(require, exports, module){
 
     SceneObject.prototype.getGeometry = function(){
         return this._geometry;
+    };
+
+    SceneObject.prototype.getTexture = function(){
+        return this._texture;
     };
 
     SceneObject.prototype.render = function(){

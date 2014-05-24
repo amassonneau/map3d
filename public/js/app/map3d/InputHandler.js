@@ -46,11 +46,12 @@ define(function(require, exports, module){
             this._hasMoved = false;
             return;
         }
-        latlng = LatLng.fromXY(this.map, e.clientX, e.clientY);
+        latlng = LatLng.fromXY(this.map, e.clientX, e.clientY, window.ALLOW_OUTSIDE);
         if(!latlng){
             return;
         }
-        this.map.panTo(latlng);
+        console.log(latlng);
+//        this.map.panTo(latlng);
     }
 
     function onMouseDown(e){
@@ -64,6 +65,7 @@ define(function(require, exports, module){
         }
         latlng = LatLng.fromXY(this.map, e.clientX, e.clientY);
         if(!latlng){
+            this._startPoint = null;
             return;
         }
         if(!this._startPoint){
@@ -82,8 +84,6 @@ define(function(require, exports, module){
         this._isMouseDown = false;
         this._startPoint = null;
         this._startCenter = null;
-        console.log(this.map.getCenter());
-
         return false;
     }
 
